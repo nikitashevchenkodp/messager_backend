@@ -8,14 +8,13 @@ import { chatService } from '../services/chat-service';
 
 class MessageController {
   async sendMessage(req: Request, res: Response) {
-    console.log('work');
-
     try {
       const { from, to, messageText, chatId } = req.body;
-      let chat = null;
-
+      let chat;
       if (!chatId) {
         chat = await chatService.createChat(from, to);
+      } else {
+        chat = await Chat.findById(chatId);
       }
 
       const newMessage = await messageService.createMessage(from, to, messageText, chat ? chat._id : chatId);

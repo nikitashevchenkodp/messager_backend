@@ -4,11 +4,13 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { chatsRouter, messageRouter, userRouter } from './routes';
 import { ServerSocket } from './socket';
+import Chat from './schemas/Chat';
 
 mongoose.set('strictQuery', false);
 
 const app: Express = express();
-const port = 5002;
+const port = parseInt(process.env.APP_PORT!);
+const IP = parseInt(process.env.IP!);
 app.use(
   cors({
     origin: '*',
@@ -21,6 +23,6 @@ app.use('/api/messages', messageRouter);
 
 mongoose.connect(process.env.DB_URL!);
 
-const server = app.listen(port, '192.168.0.10', () => console.log('success'));
+const server = app.listen(port, () => console.log('success'));
 
 new ServerSocket(server);
